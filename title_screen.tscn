@@ -1,0 +1,80 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2cil7usmud07"]
+
+[ext_resource type="Script" uid="uid://c6y3bnharibhb" path="res://start.gd" id="1_v6p8y"]
+[ext_resource type="Script" uid="uid://qlcpsgxl6cl8" path="res://quit.gd" id="2_ak2if"]
+
+[node name="TitleScreen" type="CenterContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.831373, 0.65098, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 64
+text = "Bac-Terrarium"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Flavor" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "This is an experiment of a PhD student.
+
+You are st. Grant, the patron saint of researchers and you answered the prayer.
+
+This experiment will fail without your help.
+
+Place antibiotics to kill organisms.
+Place Barriers to prevent passing through anything.
+
+If the desired bacteria survives, the PhD student is happy, if the last cell dies, the experiment is a failure."
+fit_content = true
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="HSeparator3" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Manual" type="RichTextLabel" parent="VBoxContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "Controls:
+Pan screen: mouse movement
+Zoom: Q/E scrollwheel
+Place selected item: left click
+Toggle items: space bar"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Start" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Start"
+script = ExtResource("1_v6p8y")
+
+[node name="Select" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "Select Level"
+
+[node name="Quit" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Quit"
+script = ExtResource("2_ak2if")
+
+[connection signal="pressed" from="VBoxContainer/Start" to="VBoxContainer/Start" method="_on_pressed"]
+[connection signal="pressed" from="VBoxContainer/Quit" to="VBoxContainer/Quit" method="_on_pressed"]
