@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="hex_grid"
+config/name="Bac-Terrarium"
 run/main_scene="uid://b2cil7usmud07"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
