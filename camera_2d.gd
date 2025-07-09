@@ -9,7 +9,7 @@ func _input(event: InputEvent) -> void:
 		var mbi := (event as InputEventMouseButton).button_index
 		if mbi == MouseButton.MOUSE_BUTTON_WHEEL_UP:
 			target_zoom *= ZOOM_FACTOR
-		elif mbi == MouseButton.MOUSE_BUTTON_WHEEL_UP:
+		elif mbi == MouseButton.MOUSE_BUTTON_WHEEL_DOWN:
 			target_zoom /= ZOOM_FACTOR
 	elif event is InputEventKey:
 		var ke := event as InputEventKey

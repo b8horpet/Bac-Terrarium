@@ -4,7 +4,7 @@ extends TileMapLayer
 @onready var cell_grid : CellGrid = $"../Cells"
 
 var cells : Dictionary[Vector2i,Visu] = {}
-var prop : String = "poison"
+var prop : String = "food"
 
 func _process(delta: float) -> void:
 	if prop.is_empty():

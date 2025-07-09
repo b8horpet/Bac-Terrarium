@@ -7,15 +7,56 @@ extends TileMapLayer
 @onready var base : TileMapLayer = $"../Base"
 @onready var place_que : Dictionary[Vector2i,Item.KIND] = {}
 @onready var screen := $"../SCREEN"
-
+@onready var max_cell := 1 
 
 var ticktime := 0.0
 const TICK_LENGTH := 1.0
-var game_speed := 1.0
+var game_speed := 16.0
 var iter := 0
 var t: Tween = null
 
 enum TILE_TYPE {CELL=0}
+
+var replay : Dictionary[int,Dictionary] = {
+	0: {
+		#Vector2i(-9,3): Item.KIND.BARRIER,
+		#Vector2i(-9,4): Item.KIND.BARRIER,
+		#Vector2i(-8,2): Item.KIND.BARRIER,
+		#Vector2i(-8,4): Item.KIND.BARRIER,
+		
+		Vector2i(1,6): Item.KIND.BARRIER,
+		Vector2i(0,7): Item.KIND.BARRIER,
+		Vector2i(-1,7): Item.KIND.BARRIER,
+		Vector2i(-1,6): Item.KIND.BARRIER,
+		Vector2i(0,5): Item.KIND.BARRIER,
+		Vector2i(1,5): Item.KIND.BARRIER,
+		
+		#Vector2i(2,0): Item.KIND.POISON,
+		#Vector2i(2,-1): Item.KIND.BARRIER,
+		#Vector2i(3,0): Item.KIND.BARRIER,
+		#Vector2i(3,-1): Item.KIND.BARRIER,
+		#Vector2i(2,1): Item.KIND.BARRIER,
+		#Vector2i(1,1): Item.KIND.BARRIER,
+		
+		Vector2i(1,0): Item.KIND.BARRIER,
+		Vector2i(0,1): Item.KIND.BARRIER,
+		Vector2i(-1,1): Item.KIND.BARRIER,
+		Vector2i(-1,0): Item.KIND.BARRIER,
+		Vector2i(0,-1): Item.KIND.BARRIER,
+		Vector2i(1,-1): Item.KIND.BARRIER		
+	},
+	3: {
+		#Vector2i(1,0): Item.KIND.BARRIER,
+	},
+	5: {
+		#Vector2i(0,0): Item.KIND.BARRIER,
+	},
+	#30: {
+	#	Vector2i(-7,2): Item.KIND.BARRIER,
+	#	Vector2i(-7,3): Item.KIND.BARRIER,
+	#},
+	
+}
 
 func _ready() -> void:
 	update_internals()
@@ -43,12 +84,24 @@ func _ready() -> void:
 	set_cell(enemy, 0, Vector2i(), 0)
 	update_internals()
 	cells[enemy].strain = "Player"
+	#for i in range(9):
+		#replay[0][Vector2i(i,-8)]=Item.KIND.BARRIER
+		#replay[0][Vector2i(8,-i)]=Item.KIND.BARRIER
+		#replay[0][Vector2i(i,8-i)]=Item.KIND.BARRIER
+	for i in range(100):
+		if i not in replay:
+			replay[i]={}
+		replay[i][Vector2i()]=Item.KIND.BARRIER
 	anim_start()
 
 func _process(delta: float) -> void:
 	ticktime += delta * game_speed
 	if ticktime < TICK_LENGTH:
 		return
+	if iter in replay:
+		var this_tick := replay[iter]
+		for pos in this_tick:
+			place_que[pos]=this_tick[pos] as Item.KIND
 	ticktime -= TICK_LENGTH
 	handle_cells()
 	propagate_effects()
@@ -121,7 +174,12 @@ func handle_cells() -> void:
 			for orig in spawn[s]:
 				orig.energy = -10 # instakill
 		else:
-			var orig := spawn[s].pick_random() as Cell
+			#var orig := spawn[s].pick_random() as Cell
+			var orig := spawn[s][0] as Cell
+			for i in range(1,spawn[s].size()):
+				var cand := spawn[s][i] as Cell
+				if cand.energy > orig.energy:
+					orig=cand
 			orig.energy -= 1+Cell.PROPAGATE_COST
 			set_cell(s,0,Vector2i(),TILE_TYPE.CELL)
 			update_internals()
@@ -132,6 +190,9 @@ func check_win_condition() -> void:
 	for c in cells:
 		if cells[c].strain == "Player":
 			player_cells += 1
+	if player_cells > max_cell:
+		max_cell=player_cells
+		print("new record: ", max_cell, " @", iter)
 	var text := ""
 	var go := screen.get_node("C/V/GAMEOVER")
 	if player_cells > 100:
@@ -148,6 +209,8 @@ func check_win_condition() -> void:
 		screen.visible=true
 
 func on_placement(kind: Item.KIND, pos: Vector2i) -> void:
+	if !replay.is_empty():
+		return
 	if pos not in place_que:
 		place_que[pos]=kind
 
