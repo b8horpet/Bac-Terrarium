@@ -1,0 +1,23 @@
+Theme: Tiny World
+GDD: https://docs.google.com/document/d/1epyR_uK5er6NccWr78oXQmjlJa6UwrHfDEh5GKWgs-M/edit?usp=sharing
+
+Overview:
+Game is a puzzle like environment in a petri-dish. Goal is making the desired bacterium survive while others not. The win condition can vary.
+Map is a grid (hex) that can contain cells. There are environmental factors: food, anti-biotics, etc... that influence a cell.
+Bacteria use up food to get energy, use energy for existing and can reproduce when has enough energy for that.
+Player is a benevolent "force" that helps the experiment to succeed. Can manipulate the world indirectly (placing barriers and anti biotics for now)
+
+TODO:
+Immediate:
+anti-biotics interaction is 1 sided, there is no resistance
+cell division is not realistic, should be split in exact halves
+rules are underspecified and rely too much on random factor
+in fact, randomness shall be eliminated almost entirely to make it more puzzle like
+
+Later:
+polish interactions, add anims and sound effects
+make transitions between levels, level selector?
+make tutorial levels
+make story art and screens between levels
+add input customization
+
